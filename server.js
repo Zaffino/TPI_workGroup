@@ -4,17 +4,15 @@ const app = expess()
 
 app.use(expess.json())
 
-const users = [] //in questo caso è in chiaro 
-
+const users = []
 
 app.get('/users', (req, res) => { 
     res.json(users)
 })
 
-
 app.post('/users', async(req, res) => { 
     try{
-        const salt = await bcrypt.genSalt()//genera un salt per migliorare la sicurezza delle password
+        const salt = await bcrypt.genSalt()
         const hashedPassword = await bcrypt.hash(req.body.password, salt)
         console.log(salt)
         console.log(hashedPassword)
@@ -22,7 +20,7 @@ app.post('/users', async(req, res) => {
         const user = {
             name: req.body.name,
             password: hashedPassword,
-            passwordNoHash: req.body.password
+            //passwordNoHash: req.body.password
         }
         users.push(user)
         res.status(201).send()
