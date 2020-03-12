@@ -1,0 +1,52 @@
+#funzione get per vedere gli utenti
+GET http://localhost:3000/users
+
+###
+#aggiunge un utente
+POST http://localhost:3000/users
+Content-Type: application/json
+
+{
+    "name": "tobia",
+    "password": "password"
+}
+
+###
+#password corretta
+POST http://localhost:3000/users/login
+Content-Type: application/json
+
+{
+    "name": "tobia",
+    "password": "password"
+}
+
+### 
+#password errata
+POST http://localhost:3000/users/login
+Content-Type: application/json
+
+{
+    "name": "tobia",
+    "password": "zawardo"
+}
+
+###
+#utente errato
+POST http://localhost:3000/users/login
+Content-Type: application/json
+
+{
+    "name": "cosimo",
+    "password": "password"
+}
+
+###
+#utente e password errati
+POST http://localhost:3000/users/login
+Content-Type: application/json
+
+{
+    "name": "cosimo",
+    "password": "zawardo"
+}
