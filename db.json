@@ -1,0 +1,39 @@
+{
+  "users": [
+    {
+      "id": 0,
+      "name": "tobia",
+      "password": "$2b$10$bTEXAH/T/Nq4VQ2Zdd/WeORAtlC8mtw8RlJqTo1J1N2iXPAnnY/Vy",
+      "passwordNoHash": "password",
+      "todos": [
+        {
+          "content": "todo1"
+        },
+        {
+          "content": "todo2"
+        },
+        {
+          "content": "todo N"
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "name": "zef",
+      "password": "$2b$10$bTEXAH/T/Nq4VQ2Zdd/WeORAtlC8mtw8RlJqTo1J1N2iXPAnnY/Vy",
+      "passwordNoHash": "password",
+      "todos": [
+        {
+          "content": "content"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "tobia",
+      "password": "$2b$10$8VLNCW4aCMfjSUhWLLGXsOk3rhhNtPpfdzxILGHS7Qbs19XoNLkPm",
+      "passwordNoHash": "password",
+      "todos": []
+    }
+  ]
+}

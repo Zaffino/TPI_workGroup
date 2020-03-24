@@ -1,6 +1,6 @@
 body{
     margin: 25px 50px;
-    background-color: black;
+    background-color: white;
 }
 
   h1 {
@@ -8,5 +8,5 @@ body{
     text-align: center;
   }
   p {
-      color: white;  
+      color: black;  
   }

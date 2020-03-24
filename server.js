@@ -1,28 +1,74 @@
-const expess = require('express')
+const express = require('express')
 const bcrypt = require('bcrypt')
-const app = expess()
+const app = express()
 
-app.use(expess.json())
+const FileSync = require('lowdb/adapters/FileSync')
 
-const users = []
+const low = require('lowdb');
+const adapter = new FileSync('db.json');
+const db = low(adapter);
 
+app.use(express.json())
+
+//const users = []
+
+/*
+get all users
+*/
 app.get('/users', (req, res) => { 
-    res.json(users)
+    //res.json(users)
+    users = db.get("users").value()
+    console.log(users)
+    res.status(200).send()
 })
 
-app.post('/users', async(req, res) => { 
+/*
+get 1 user
+*/
+app.get('/users/:name', (req, res) => { 
+    name = req.params.name;
+    
+    user = db.get("users").find({"name":name}).value();
+    console.log(user)
+    res.status(200).send()
+})
+
+/*
+get 1 user's todos
+*/
+app.get('/users/:name/todos', (req, res) => { 
+    name = req.params.name;
+    
+    user = db.get("users").find({"name":name}).get("todos").value();
+    console.log(user)
+    res.status(200).send()
+})
+
+/*
+create new user
+*/
+app.post('/users', async (req, res) => {
     try{
-        const salt = await bcrypt.genSalt()
-        const hashedPassword = await bcrypt.hash(req.body.password, salt)
-        console.log(salt)
+        //const salt =  bcrypt.genSalt() // =10
+        const hashedPassword = await bcrypt.hash(req.body.password, 10)
         console.log(hashedPassword)
         
-        const user = {
+        lastUserID = db.get("users").last().get("id").value();
+        console.log(lastUserID)
+
+        const newuser = {
+            id: lastUserID + 1,
             name: req.body.name,
             password: hashedPassword,
-            //passwordNoHash: req.body.password
+            passwordNoHash: req.body.password,
+            todos: []
         }
-        users.push(user)
+
+        db.get("users")
+        .push(newuser)
+        .last()
+        .write()
+
         res.status(201).send()
     }
     catch{
@@ -30,14 +76,19 @@ app.post('/users', async(req, res) => {
     }
 })
 
-
-app.post('/users/login', async(req, res) => {
-    const user = users.find(user => user.name === req.body.name)
-    if(user == null){
-        return res.status(400).send("l'utente non esiste")
+/*
+search a user and check if the user and password are correct
+*/
+app.post('/users/login', async (req, res) => {
+    const user = db.get("users").find({"name":req.body.name}).value();
+    const hashedPassword = db.get("users").find({"name":req.body.name}).get("password").value();
+    //const user = users.find(user => user.name === req.body.name)
+    console.log(req.body.password, hashedPassword)
+    if(user == null){   //funziona
+        return res.status(400).send("l'utente non esiste") 
     }
-    try{
-        if(await bcrypt.compare(req.body.password, user.password)){
+    try{ 
+        if( await bcrypt.compare(req.body.password, hashedPassword)){
             res.send("successo")
         }
         else{
@@ -48,5 +99,19 @@ app.post('/users/login', async(req, res) => {
         res.status(500).send()
     }
 })
+
+/*
+create new todo
+*/
+app.post('/users/:name/todos', async (req, res) => {
+    db.get("users").find({"name":req.params.name}).get("todos")
+    .push({
+      content : req.body.content
+    })
+    .last()
+    .write()
+})
+
+
 
 app.listen(3000)

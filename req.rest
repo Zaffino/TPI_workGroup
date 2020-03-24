@@ -1,5 +1,16 @@
 #funzione get per vedere gli utenti
-GET http://localhost:3000/users
+GET http://localhost:3000/users/
+
+###
+#funzione get per vedere un utente
+GET http://localhost:3000/users/tobia
+
+###
+#funzione get per vedere i todo
+GET http://localhost:3000/users/tobia/todos
+
+
+
 
 ###
 #aggiunge un utente
@@ -8,7 +19,12 @@ Content-Type: application/json
 
 {
     "name": "tobia",
-    "password": "password"
+    "password": "password",
+    "TODOs": [
+        {
+            "content": "lavati i denti"
+        }
+    ]
 }
 
 ###
@@ -49,4 +65,14 @@ Content-Type: application/json
 {
     "name": "cosimo",
     "password": "zawardo"
+}
+
+
+###
+#funzione post per aggiungere un todo
+POST http://localhost:3000/users/tobia/todos
+Content-Type: application/json
+
+{
+    "content" : "todo N"
 }
