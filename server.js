@@ -55,7 +55,8 @@ app.post('/users', async (req, res) => {
         
         lastUserID = db.get("users").last().get("id").value();
         console.log(lastUserID)
-
+        if(lastUserID == null)
+            lastUserID = -1
         const newuser = {
             id: lastUserID + 1,
             name: req.body.name,
@@ -103,15 +104,25 @@ app.post('/users/login', async (req, res) => {
 /*
 create new todo
 */
-app.post('/users/:name/todos', async (req, res) => {
-    db.get("users").find({"name":req.params.name}).get("todos")
-    .push({
-      content : req.body.content
-    })
-    .last()
-    .write()
+app.post('/users/:name/todos', (req, res) => {
+    lastTodoID = db.get("users").find({"name":req.params.name}).get("todos").last().get("id").value();
+    if(lastTodoID == null)
+        lastTodoID = -1
+    try {
+        db.get("users").find({"name":req.params.name}).get("todos")
+        .push({
+            id : lastTodoID + 1,
+            content : req.body.content
+        })
+        .last()
+        .write()
+        res.status(200).send()
+    } catch (error) {
+        res.status(500).send()
+    }
+    
 })
 
-
+  
 
 app.listen(3000)

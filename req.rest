@@ -18,13 +18,9 @@ POST http://localhost:3000/users
 Content-Type: application/json
 
 {
-    "name": "tobia",
-    "password": "password",
-    "TODOs": [
-        {
-            "content": "lavati i denti"
-        }
-    ]
+    "name": "L",
+    "password": "zawardo",
+    "todos": []
 }
 
 ###
