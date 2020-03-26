@@ -72,3 +72,7 @@ Content-Type: application/json
 {
     "content" : "todo N"
 }
+
+###
+#funzione post per eliminare un todo
+POST http://localhost:3000/users/tobia/todos/0

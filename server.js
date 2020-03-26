@@ -49,6 +49,12 @@ create new user
 */
 app.post('/users', async (req, res) => {
     try{
+        
+        if(db.get("users").find({"name":req.body.name}).value() != null){
+            res.status(501).send()
+            return
+        }
+
         //const salt =  bcrypt.genSalt() // =10
         const hashedPassword = await bcrypt.hash(req.body.password, 10)
         console.log(hashedPassword)
@@ -115,6 +121,37 @@ app.post('/users/:name/todos', (req, res) => {
             content : req.body.content
         })
         .last()
+        .write()
+        res.status(200).send()
+    } catch (error) {
+        res.status(500).send()
+    }
+    
+})
+
+/*
+delete a todo
+*/
+app.post('/users/:name/todos/:id', async(req, res) => {
+
+    const contentID = parseInt(req.params.id)
+    const TodoContent = await db.get("users")
+    .find({"name" : req.params.name})
+    .get("todos")
+    .find({"id" : contentID})
+    .get("content")
+    .value()
+    
+    console.log(contentID , TodoContent)
+    
+    try {
+        await db.get('users')
+        .find({"name":req.params.name})
+        .get("todos")
+        .remove({ 
+            id: contentID,
+            content: TodoContent
+        })
         .write()
         res.status(200).send()
     } catch (error) {
